@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+</head>
+<body>
+    <h1>Result</h1>
+    <form method="post" action="/result">
+        {% csrf_token %}
+        Roll no. <input type="text" name="rollno"/><br/>
+        Name <input type="text" name="name"/><br/>
+        Gujarati <input type="text" name="guj"/><br/>
+        English <input type="text" name="eng"/><br/>
+        Hindi <input type="text" name="hin"/><br/>
+        <button type="submit">Submit</button>
+        
+        <h3>Roll no. : {{rollno}}</h3>
+        <h3>Name : {{name}}</h3>
+        <h3>Gujarati : {{gujarati}}</h3>
+        <h3>English : {{english}}</h3>
+        <h3>Hindi : {{hindi}}</h3>
+        <h3>Total : {{total}}</h3>
+        <h3>Avg : {{avg}}</h3>
+        
+    </form>
+
+    
+</body>
+</html>

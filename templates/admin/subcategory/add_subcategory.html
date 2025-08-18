@@ -1,0 +1,115 @@
+{% extends 'admin/master.html' %}
+{% load static %}
+{% block 'title' %}
+Add Subcategory
+{% endblock %}
+
+
+ {% block 'js' %}
+ 
+ <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
+ <script>
+    $("#form1").validate({
+        rules:
+        {
+            txtcatid:
+            {
+                required:true
+            },
+            txtsubcatname:
+            {
+                required:true
+            },
+            txtsubcatimg:
+            {
+                required:true
+            },
+        },
+        messages:
+        {
+            txtcatid:
+            {
+                required:"Please select category"
+            },
+            txtsubcatname:
+            {
+                required:"Please select sub category name"
+            },
+            txtsubcatimg:
+            {
+                required:"Please select subcategory image"
+            },
+        }
+    });
+ </script>
+ 
+ {% endblock %}
+
+
+{% block 'main' %}
+<div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+    <div class="container-fluid">
+
+        <div class="row page-titles">
+                            <div class="col-md-5 align-self-center">
+                                <h4 class="text-themecolor">Manage Subcategory</h4>
+                            </div>
+                            <div class="col-md-7 align-self-center text-end">
+                                <div class="d-flex justify-content-end align-items-center">
+                                    <ol class="breadcrumb justify-content-end">
+                                        <li class="breadcrumb-item">
+                                            <a href="/custom/dashboard">Dashboard</a>
+                                        </li>
+                                        <li class="breadcrumb-item "><a href="/custom/subcategory/view" > View Subcategories</a></li>
+                                        <li class="breadcrumb-item active">Add Subcategory</li>
+                                    </ol>
+                                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Add Subcategory form</h4>
+                <h6 class="card-subtitle"></h6>
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                    <form id="form1" class="form p-t-20" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %} 
+                         <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select class="form-control form-select" name="txtcatid" data-placeholder="Choose a Category" tabindex="1">
+                                <option value="">Please select category</option>
+                                {% for row in categories %}
+                                    <option value="{{ row.cat_id }}">{{ row.cat_name }}</option>
+                                {% endfor %}
+                                
+                            </select>
+                        </div>
+                                            
+                        <div class="form-group">
+                            <label class="form-label" for="txtsubcatname">Subcategory Name</label>
+                            <div class=" mb-3">
+                                <input type="text" class="form-control" name="txtsubcatname" id="txtsubcatname"  aria-label="Username" aria-describedby="txtsubcatname">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtsubcatimg">Subcategory Image</label>
+                            <div class=" mb-3">
+                                <input type="file" class="form-control" name="txtsubcatimg" id="txtsubcatimg"  aria-label="Email" aria-describedby="basic-addon2">
+                            </div>
+                        </div>
+                       
+                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10 text-white">Submit</button>
+                        <button type="reset" class="btn btn-inverse waves-effect waves-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+    </div>
+</div>
+{% endblock %}

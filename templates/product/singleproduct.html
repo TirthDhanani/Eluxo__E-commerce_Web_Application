@@ -1,0 +1,255 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block 'title' %}
+Products
+{% endblock %}
+{% block 'css' %}{% endblock %}
+{% block 'js' %}{% endblock %}
+{% block 'main' %}
+<div class="product-details-full">                            
+  <div class="container">
+      <div class="row">
+          <div class="col-md-7 col-lg-7 col-sm-12">
+              <div class="product-detail-image">
+                  <div class="thumbnails">
+                      <a data-url="{{productdata.thumbnail_image}}" class="active" href="#"><img src="{{productdata.thumbnail_image}}" alt=""></a>
+                      <a data-url="{{productdata.image1}}" href="#"><img src="{{productdata.image1}}" alt=""></a>
+                      <a data-url="{{productdata.image2}}" href="#"><img src="{{productdata.image2}}" alt=""></a>
+                  </div>
+                  <div class="main-image-wapper">
+                      <img class="main-image" src="{{productdata.thumbnail_image}}" alt="">
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-5 col-lg-5 col-sm-12">
+              <div class="product-details-right">
+                  <div class="breadcrumbs">
+                        <a href="#">Home</a>
+                         <a href="#">{{productdata.subcat_id.cat_id.cat_name}}</a>
+                         <a href="#">{{productdata.subcat_id.subcat_name}}</a>
+                        <!-- <span></span> -->
+                  </div>
+                  <h3 class="product-name">{{productdata.product_name}}</h3>
+                  <div class="rating">
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <span class="count-review">( 2 <span>Reviews</span> )</span>
+                  </div>
+                  <span class="price">
+                      <ins>₹ {{productdata.sell_price}}</ins>
+                      <del>₹ {{productdata.retail_price}}</del>
+                  </span>
+
+                  <div class="short-descript">
+                      {{productdata.product_description|safe}}
+                  </div>
+                  {% if request.user.is_authenticated %}
+                  <form class="cart" enctype="multipart/form-data" method="post" action="/cart/add/{{productdata.product_id}}">
+                    {% csrf_token %}
+                    <div class="quantity">
+                        <span>Quantity</span>
+                        <input type="text" size="4" class="input-text qty text" title="Qty" value="+1" name="quantity">
+                    </div>
+                    
+                    <a class="wishlist button" href="#"><i class="fa fa-heart-o"></i></a>
+                    <button class="button button-add-cart" data-quantity="1"  type = "submit">Add to cart</button>
+                  </form>
+                {% endif %} 
+              </div>
+          </div>
+      </div>
+    </div>
+</div>
+<div class="container">                        
+    <div class="tab-details-product padding-40-60">
+        <ul class="box-tabs nav-tab">
+            <li class="active"><a data-toggle="tab" href="#tab-1">DESCRIPTION</a></li>
+            <li><a data-toggle="tab" href="#tab-2">ADDITIONAL INFORMATION</a></li>
+        </ul>
+        <div class="tab-container">
+              <div id="tab-1" class="tab-panel active">
+                <p>{{productdata.product_specification | safe}}</p>                                                   
+                </ul>
+            </div>
+            <div id="tab-2" class="tab-panel">
+                <p>Quisque sodales sodales lacus pharetra bibendum. Etiam commodo non velit ac rhoncus. Mauris euismod purus sem, ac adipiscing quam laoreet et. Praesent vulputate ornare sem vel scelerisque. Ut dictum augue non erat lacinia, sed lobortis elit gravida. Proin ante massa, ornare accumsan ultricies et, posuere sit amet magna. Praesent dignissim, enim sed malesuada luctus, arcu sapien sodales sapien, ut placerat eros nunc vel est. Donec tristique mi turpis, et sodales nibh gravida eu. Etiam odio risus, porttitor non lacus id, rhoncus tempus tortor. Curabitur tincidunt molestie turpis, ut luctus nibh sollicitudin vel. Sed vel luctus nisi, at mattis metus. Aenean ultricies dolor est, a congue ante dapibus varius. Nulla at auctor nunc. Curabitur accumsan feugiat felis ut pretium. Praesent semper semper nisi, eu cursus augue.</p>
+            </div>     
+        </div>  
+    </div> 
+
+    <div class="upsell-products">
+        <div class="section-title text-center"><h3>Similar Products</h3> </div>
+         <ul class="owl-carousel" data-responsive='{"0":{"items":1},"600":{"items":3},"1000":{"items":4}}' data-autoplay="true" data-loop="true" data-items="4" data-dots="false" data-nav="false" data-margin="30">
+            <li class="product-item">
+                <div class="product-inner">
+                    <div class="product-thumb">
+                        <a href="#"><img src="{% static 'user_assets/images/products/5.jpg' %}" alt=""></a>
+                        <div class="gorup-button">
+                          <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                          <a href="#" class="compare"><i class="fa fa-exchange"></i></a>
+                          <a href="#" class="quick-view"><i class="fa fa-search"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name"><a href="#">London Star Sweatshirt</a></h3>
+                        <span class="price">
+                            <ins>£85.00</ins>
+                            <del>£95.00</del>
+                        </span>
+                        <a href="#" class="button">ADD TO CART</a>
+                    </div>
+                </div>
+            </li>
+            <li class="product-item">
+                <div class="product-inner">
+                    <div class="product-thumb">
+                        <a href="#"><img src="{% static 'user_assets/images/products/6.jpg' %}" alt=""></a>
+                        <div class="gorup-button">
+                          <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                          <a href="#" class="compare"><i class="fa fa-exchange"></i></a>
+                          <a href="#" class="quick-view"><i class="fa fa-search"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name"><a href="#">London Star Sweatshirt</a></h3>
+                        <span class="price">
+                            <ins>£85.00</ins>
+                            <del>£95.00</del>
+                        </span>
+                        <a href="#" class="button">ADD TO CART</a>
+                    </div>
+                </div>
+            </li>
+            <li class="product-item">
+                <div class="product-inner">
+                    <div class="product-thumb">
+                        <a href="#"><img src="{% static 'user_assets/images/products/7.jpg' %}" alt=""></a>
+                        <div class="gorup-button">
+                          <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                          <a href="#" class="compare"><i class="fa fa-exchange"></i></a>
+                          <a href="#" class="quick-view"><i class="fa fa-search"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name"><a href="#">London Star Sweatshirt</a></h3>
+                        <span class="price">
+                            <ins>£85.00</ins>
+                            <del>£95.00</del>
+                        </span>
+                        <a href="#" class="button">ADD TO CART</a>
+                    </div>
+                </div>
+            </li>
+            <li class="product-item">
+                <div class="product-inner">
+                    <div class="product-thumb">
+                        <a href="#"><img src="{% static 'user_assets/images/products/8.jpg' %}" alt=""></a>
+                        <div class="gorup-button">
+                          <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+                          <a href="#" class="compare"><i class="fa fa-exchange"></i></a>
+                          <a href="#" class="quick-view"><i class="fa fa-search"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name"><a href="#">London Star Sweatshirt</a></h3>
+                        <span class="price">
+                            <ins>£85.00</ins>
+                            <del>£95.00</del>
+                        </span>
+                        <a href="#" class="button">ADD TO CART</a>
+                    </div>
+                </div>
+            </li>
+        </ul>   
+    </div> 
+</div> <!--END CONTAINER-->                                             
+
+<div class="box-list-reviews">
+  <div class="container">  
+    <div class="row">
+      <div class="col-md-6 col-lg-6 col-sm-12">
+        <div class="box-review">
+          <h4 class="title-border"><span class="text">CUSTOMER REVIEWS</span><span class="subtext">( 2 Reviews )</span></h4>
+          <ol class="commentlist">
+              <li class="comment">
+                  <div class="comment_container">
+                      <div class="comment-info">
+                          <div class="rating">
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>                                                
+                          </div>
+                          <div class="meta">
+                            <span class="author">James Koster</span>
+                            <span class="date">20 Dec 2015</span>
+                          </div>
+                      </div>
+                      <div class="comment-text">
+                          <h5 class="comment-title">What a Beautiful Design</h5>
+                          <div class="comment-content">
+                            Cras neque nulla, convallis non commodo et, euismod nonsese. At vero eos et accusamus et iusto odio dignimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.
+                          </div>
+                      </div>
+                  </div>
+              </li>
+              <li class="comment">
+                  <div class="comment_container">
+                      <div class="comment-info">
+                          <div class="rating">
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>
+                              <i class="fa fa-star"></i>                                                
+                          </div>
+                          <div class="meta">
+                            <span class="author">James Koster</span>
+                            <span class="date">20 Dec 2015</span>
+                          </div>
+                      </div>
+                      <div class="comment-text">
+                          <h5 class="comment-title">What a Beautiful Design</h5>
+                          <div class="comment-content">
+                            Cras neque nulla, convallis non commodo et, euismod nonsese. At vero eos et accusamus et iusto odio dignimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.
+                          </div>
+                      </div>
+                  </div>
+              </li>
+          </ol>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-6 col-sm-12">
+        <div class="box-review form-review">
+            <h4 class="title-border"><span class="text">ADD A REVIEW</span></h4>
+            <form class="reviews">
+                <p>
+                  <input type="text" name="name" placeholder="Your name" />
+                </p>
+                <p>
+                  <input type="email" name="email" placeholder="Your email" />
+                </p>
+                <p>
+                  <textarea cols="40" placeholder="Your review"></textarea>
+                </p>
+                <div class="rating">
+                    <label>Your rating</label>
+                    <a href="#"><i class="fa fa-star"></i></a>  
+                    <a href="#"><i class="fa fa-star"></i></a>  
+                    <a href="#"><i class="fa fa-star"></i></a>  
+                    <a href="#"><i class="fa fa-star"></i></a>  
+                    <a href="#"><i class="fa fa-star"></i></a>                                                 
+                </div>
+                <input type="submit" class="button submit" name="email" value="ADD A REVIEW" />
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  
+{% endblock %}   
+         

@@ -1,0 +1,108 @@
+{% extends 'admin/master.html' %}
+{%load static %}
+
+
+{% block 'title' %}
+Categories
+{% endblock %}
+{% block 'css' %}
+ <link rel="stylesheet" type="text/css"
+        href="{% static 'assets/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css' %}">
+    <link rel="stylesheet" type="text/css"
+        href="{% static 'assets/node_modules/datatables.net-bs4/css/responsive.dataTables.min.css' %}">
+{% endblock %}
+{% block 'js' %}
+   <!-- Chart JS -->
+    <script src="{% static 'dist/js/dashboard4.js' %}"></script>
+{% endblock %}
+{% block 'main' %}
+     <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-5 align-self-center">
+                        <h4 class="text-themecolor">Manage Category</h4>
+                    </div>
+                    <div class="col-md-7 align-self-center text-end">
+                        <div class="d-flex justify-content-end align-items-center">
+                            <ol class="breadcrumb justify-content-end">
+                                <li class="breadcrumb-item">
+                                    <a href="/custom/dashboard">Dashboard</a>
+                                </li>
+                                <li class="breadcrumb-item active">Category</li>
+                            </ol>
+                            <a href="/custom/category/add" class="btn btn-info d-none d-lg-block m-l-15 text-white">
+                                <i class="fa fa-plus-circle"></i> Add Category</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">View All Category</h4>
+                                <div class="table-responsive m-t-40">
+                                     {% if messages %}
+                                        {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <table id="example23"
+                                        class="display nowrap table table-hover table-striped border"
+                                        cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <!-- <th>Id</th> -->
+                                                 <th>Image</th>
+                                                <th>Category Name</th>
+                                                
+                                                <th>Action</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                       
+                                        <tbody>
+                                            {% for row in catdata %}
+                                            <tr>
+                                                <!-- <td>Tiger Nixon</td> -->
+                                                 <td>
+                                                    <a href="{{row.cat_image}}" target="_blank">
+                                                        <img src="{{row.cat_image}}" width="100"/>
+                                                    </a>
+                                                 </td>
+                                                <td>{{row.cat_name}}</td>
+                                                
+                                                <td>
+                                                    <a href="/custom/category/delete/{{row.cat_id}}" class="btn waves-effect waves-light btn-rounded btn-danger btn-sm">Delete</a>
+                                                    <a href="/custom/category/edit/{{row.cat_id}}" class="btn waves-effect waves-light btn-rounded btn-warning btn-sm">Edit</a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+                
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+        </div>   
+       
+{% endblock %}

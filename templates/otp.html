@@ -1,0 +1,63 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block 'title' %}
+Verify OTP
+{% endblock %}
+{% block 'css' %}
+<style>
+.otp-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center horizontally */
+  justify-content: center; /* center vertically */
+  min-height: 50vh; /* adjust for vertical position */
+}
+.otp-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.otp-group input {
+  width: 40px;
+  text-align: center;
+}
+</style>
+{% endblock %}
+{% block 'js' %}
+<script>
+function moveNext(current, nextFieldName) {
+  if (current.value.length === 1) {
+    const form = current.form;
+    const next = form.elements[nextFieldName];
+    if (next) {
+      next.focus();
+    }
+  }
+}
+</script>
+{% endblock %}
+
+{% block 'main' %}
+{% if messages %}
+{% for message in messages %}
+    <tr>
+        <td colspan="6">
+            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+        </td>
+    </tr>
+{% endfor %}
+{% endif %}
+<div class="otp-wrapper">
+  <form method="POST" action="/otp">
+    {% csrf_token %}
+    <h3>Enter the 4-digit code</h3>
+    <div class="otp-group">
+      <input type="text" name="d1" maxlength="1" oninput="moveNext(this, 'd2')">
+      <input type="text" name="d2" maxlength="1" oninput="moveNext(this, 'd3')">
+      <input type="text" name="d3" maxlength="1" oninput="moveNext(this, 'd4')">
+      <input type="text" name="d4" maxlength="1">
+    </div>
+    <button type="submit" class="button">Submit</button>
+  </form>
+</div>
+{% endblock %}

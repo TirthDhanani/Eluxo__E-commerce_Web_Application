@@ -1,0 +1,80 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block 'main' %}
+<div class="container">
+    <div class="main-content">
+        <div class="page-title">
+            <h3>Order details</h3>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">   
+                <table class="shop_table cart">
+                    <thead>
+                        <tr>
+                            <th class="product-thumbnail">Product</th>
+                            <th  class="product-name"></th>
+                            <th class="product-price">Price</th>
+                            <th class="product-quantity">Qty.</th>
+                            <th class="product-subtotal">Total</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody> 
+                        {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        {% for row in items %}
+                    
+                        <tr>
+                            <td class="product-thumbnail"><img src="{{row.product_id.thumbnail_image}}" alt=""></td>
+                            <td class="product-name"><a href="#">{{row.product_id.product_name}}</a></td>
+                            <td>{{row.item_price}}</td>
+                            <td>{{row.quantity}}</td>
+                            <td>{{ row.totalofitem }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <div class="box-cart-total">
+                    <h2 class="title"></h2>
+                    <table>
+                        <tr>
+                            <td>Total Payment:</td>
+                            <td>Rs. {{ orderdata.total_payment }}</td>
+                        </tr>
+                        <tr>
+                            <td>Discount:</td>
+                            <td>{{orderdata.discount}}</td>
+                        </tr>
+                        <tr>
+                            <td>Delivery address: </td>
+                            <td>{{orderdata.addressline1}},<br>
+                                {{orderdata.addressline2}}<br>
+                                {{orderdata.city}}, {{orderdata.state}},<br>
+                                {{orderdata.pincode}}</td>
+                        </tr>
+                        <tr>
+                            <td>Order status:</td>
+                            <td>{{orderdata.status}}</td>
+                        </tr>
+                        <tr>
+                            <td>Placed order on:</td>
+                            <td>{{orderdata.orderdatetime}}</td>
+                        </tr>
+                        <tr>
+                            <td>Contact:</td>
+                            <td>{{orderdata.contactnumber}}</td>
+                        </tr>
+                    </table>
+                    
+                </div>
+                <a href = "/shop" class="button btn-primary medium checkout-button" >GET BACK TO SHOPPING</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

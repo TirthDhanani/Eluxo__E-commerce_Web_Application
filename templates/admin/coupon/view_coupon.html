@@ -1,0 +1,113 @@
+{% extends 'admin/master.html' %}
+{% load static %}
+{% block 'title' %}
+Coupons
+{% endblock %}
+
+{% block 'css' %}
+<!-- This Page CSS -->
+    <link rel="stylesheet" type="text/css"
+        href="{% static 'assets/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css' %}">
+    <link rel="stylesheet" type="text/css"
+        href="{% static 'assets/node_modules/datatables.net-bs4/css/responsive.dataTables.min.css' %}">
+{% endblock %}
+{% block 'main' %}
+<!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-5 align-self-center">
+                        <h4 class="text-themecolor">Manage Coupons</h4>
+                    </div>
+                    <div class="col-md-7 align-self-center text-end">
+                        <div class="d-flex justify-content-end align-items-center">
+                            <ol class="breadcrumb justify-content-end">
+                                <li class="breadcrumb-item">
+                                    <a href="/custom/dashboard">Dashboard</a>
+                                </li>
+                                <li class="breadcrumb-item active">Coupons</li>
+                            </ol>
+                            <a href="/custom/master/add_coupons" class="btn btn-info d-none d-lg-block m-l-15 text-white">
+                                <i class="fa fa-plus-circle"></i> Add Coupon</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                 <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">View All Coupons</h4>
+                                {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                                {% endfor %}
+                                {% endif %}
+                                
+                                <div class="table-responsive m-t-40">
+                                    <table id="myTable" class="table table-striped border">
+                                        <thead>
+                                            <tr>
+                                                <th>Coupon code</th>
+                                                <th>Minimum cart value</th>
+                                                <th>Maximum cart value</th>
+                                                <th>Discount (%)</th>
+                                                <th>Coupon Status</th>
+                                                <th>Action</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for row in coupondata %}
+                                            <tr>
+                                                
+                                                <td>{{row.coupon_code}}</td>
+                                                <td>Rs.{{row.min_cart_value}}</td>
+                                                <td>Rs.{{row.max_cart_value}}</td>
+                                                <td>{{row.discount_percent}}%</td>
+                                                <td>{{row.coupon_stat}}</td>
+                                                <td>
+                                                    <a href="/custom/master/delete_coupons/{{row.coupon_id}}" class="btn waves-effect waves-light btn-rounded btn-danger btn-sm">Delete</button>
+                                                     <a href ="/custom/master/edit_coupons/{{row.coupon_id}}" class="btn waves-effect waves-light btn-rounded btn-warning btn-sm">Edit</button>
+                                                </td>
+
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+        </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+        <footer class="footer">
+           
+        </footer>
+        <!-- ============================================================== -->
+        <!-- End footer -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+{% endblock %}
+{% block 'js' %}
+{% endblock %}

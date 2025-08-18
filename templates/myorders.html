@@ -1,0 +1,79 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block 'css' %}
+<style>
+.clickable-row {
+    cursor: pointer;
+}
+.clickable-row:hover {
+    background-color: #f5f5f5; /* light gray */
+    transition: background-color 0.3s ease;
+}
+</style>
+
+{% endblock %}
+{% block 'main' %}
+<div class="container">
+    <div class="main-content">
+        <div class="page-title">
+            <h3>My Orders</h3>
+        </div>
+        <div class="row">
+           <div class="col-sm-12 col-md-8">   
+                <table class="shop_table cart" style="margin: 0 auto;">
+                    <thead>
+                        <tr>
+                            <th class="order-id">Order ID</th>
+                            <th class="order-payment">Payment</th>
+                            <th class="order-address">Address</th>
+                            <th class="order-city">City</th>
+                            <th class="order-status">Status</th>
+                            <th class="order-date-time">Date and Time</th>
+                        </tr>
+                    </thead>                  
+                    <tbody> 
+                        {% if messages %}
+                            {% for message in messages %}
+                            <tr>
+                                <td colspan="6">
+                                    <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+
+                       {% for row in orderdata %}
+                        <tr class="clickable-row" data-href="/order/items/{{ row.order_id }}">
+                            <td class="order-id">{{ row.order_id }}</td>
+                            <td class="order-payment">Rs. {{ row.total_payment|floatformat:2 }}</td>
+                            <td class="order-address">
+                                {{ row.addressline1 }}<br>
+                                {{ row.addressline2 }}
+                            </td>
+                            <td class="order-city">{{ row.city }}</td>
+                            <td class="order-status">{{ row.status }}</td>
+                            <td class="order-date-time">{{ row.orderdatetime|date:"M d, Y, g:i A" }}</td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block 'js' %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll(".clickable-row");
+    rows.forEach(row => {
+        row.addEventListener("click", () => {
+            const url = row.getAttribute("data-href");
+            if (url) window.location.href = url;
+        });
+    });
+});
+</script>
+
+{% endblock %}

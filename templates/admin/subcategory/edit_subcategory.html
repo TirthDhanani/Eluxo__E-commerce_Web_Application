@@ -1,0 +1,71 @@
+{% extends 'admin/master.html' %}
+{% load static %}
+{% block 'title' %}
+Edit Subcategory
+{% endblock %}
+{% block 'main' %}
+<div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+    <div class="container-fluid">
+
+        <div class="row page-titles">
+                            <div class="col-md-5 align-self-center">
+                                <h4 class="text-themecolor">Manage Subcategory</h4>
+                            </div>
+                            <div class="col-md-7 align-self-center text-end">
+                                <div class="d-flex justify-content-end align-items-center">
+                                    <ol class="breadcrumb justify-content-end">
+                                        <li class="breadcrumb-item">
+                                            <a href="/custom/dashboard">Dashboard</a>
+                                        </li>
+                                        <li class="breadcrumb-item "><a href="/custom/subcategory/view" > View Subcategories</a></li>
+                                        <li class="breadcrumb-item active">Edit Subcategory</li>
+                                    </ol>
+                                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Edit Subcategory form</h4>
+                <h6 class="card-subtitle"></h6>
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                    <form class="form p-t-20" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %} 
+                         <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select class="form-control form-select" name="txtcatid" data-placeholder="Choose a Category" tabindex="1">
+                                {% for row in categories %}
+                                    <option value="{{ row.cat_id }}" {% if row.cat_id == subcatdata.cat_id.cat_id %} selected {% endif %}>{{ row.cat_name }}</option>
+                                {% endfor %}
+                                
+                            </select>
+                        </div>
+                                            
+                        <div class="form-group">
+                            <label for="exampleInputuname">Subcategory Name</label>
+                            <div class="input-group mb-3">
+                                <input type="text" value="{{subcatdata.subcat_name}}" class="form-control" name="txtsubcatname"  aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Subcategory Image</label>
+                            <div class="input-group mb-3">
+                                <input type="file" class="form-control" name="txtsubcatimg"  aria-label="Email" aria-describedby="basic-addon2">
+                            </div>
+                            <img src="{{subcatdata.subcat_image}}" width="100"/>
+                        </div>
+                       
+                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10 text-white">Submit</button>
+                        <button type="reset" class="btn btn-inverse waves-effect waves-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+    </div>
+</div>
+{% endblock %}

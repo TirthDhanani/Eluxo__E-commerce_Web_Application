@@ -1,0 +1,147 @@
+{% extends 'master.html' %}
+{% load static %}
+
+{% block 'js' %}
+
+
+<script>
+
+
+    $(document).ready(function(){
+       
+
+        $("#apply_coupon").click(function(){
+            var coupon_code = $("#coupon_code").val();
+            
+            $.ajax({
+                url:"/check_coupon",
+                method:'POST',
+                data:{
+                    "coupon_code":coupon_code,
+                    "total":$("#txttotal").val()
+                },
+                success:function(obj)
+                {
+                    if(obj.status == "found")
+                    {
+                        $("#disamt").html(obj.disamt)
+                        var total = parseFloat($("#txttotal").val()) - parseFloat(obj.disamt)
+                        $("#grandtotal").html(total)
+                        $("#txttotal").val(total)
+                    }
+                    else if(obj.status == "notvalid")
+                    {
+                        $("#output").html("Coupon is invalid")
+                    }
+                    else
+                    {
+                        $("#output").html("Coupon not found")
+                    }
+                },
+                error:function(error)
+                {
+                    console.log(error);
+                }
+            })
+
+
+        });
+
+
+    });
+
+
+</script>
+
+{% endblock %}
+{% block 'main' %}
+<div class="container">
+    <div class="main-content">
+        <div class="page-title">
+            <h3>SHOPPING CART</h3>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-8">   
+                <table class="shop_table cart">
+                <form method="POST" action ="/cart/update">
+                    {% csrf_token %}
+                    <thead>
+                        <tr>
+                            <th class="product-thumbnail">Product</th>
+                            <th  class="product-name"> </th>
+                            <th class="product-price">Price</th>
+                            <th class="product-quantity">Qty</th>
+                            <th class="product-subtotal">Total</th>
+                            <th class="product-remove">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody> 
+                        {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        {% for row in cartdata %}
+                    
+                        <tr>
+                            <td class="product-thumbnail"><img src="{{row.product_id.thumbnail_image}}" alt=""></td>
+                            <td class="product-name"><a href="view/{{row.product_id.product_id}}">{{row.product_id.product_name}}</a></td>
+                            <td>₹{{row.product_id.sell_price}}</td>
+                            
+                            <td>
+                                <input type = 'hidden' name = 'cartid_{{forloop.counter}}' value="{{row.cart_id}}">
+                                <input class="qty" name = 'cartquantity_{{forloop.counter}}' type="text" value="+{{row.quantity}}"></td>
+                            
+                            <td>₹{{ row.getproducttotal }}</td>
+                            <td class="product-remove"><a href="cart/delete/{{row.cart_id}}"><i class="fa fa-close"></i></a></td>
+                        </tr>
+                    
+                        {% endfor %}
+                    </tbody>
+                    <input type="hidden" name="total_items" value="{{ cartdata|length }}">
+                    <button type = 'submit' class="button medium">UPDATE CART</button>
+                </form>
+                </table>
+                <div class="box-coupon">
+                    <div class="coupon">
+                        <h3 class="coupon-box-title">Coupon</h3>
+                        <div class="inner-box">
+                            <input type="text" name="coupon_code" class="input-text" id="coupon_code"  placeholder="Coupon code">
+                            <input type="button" class="button" name="apply_coupon" id="apply_coupon" value="Apply Coupon">
+                        </div>
+                        <p id="output"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="box-cart-total">
+                    <h2 class="title">Cart Totals</h2>
+                    <table>
+                        <tr>
+                            <td>Subtotal</td>
+                            <td>₹{{ grandtotal | floatformat:2 }}</td>
+                        </tr>
+                        <tr>
+                            <td>Discount</td>
+                            <td>₹<span id="disamt">{{ disamt }}</span></td>
+                            <td class="product-remove"><a href="/remove_discount"><i class="fa fa-close"></i></a></td>
+                        </tr>
+                        </tr>
+                       
+                        <tr class="order-total">
+                            <td>Total</td>
+                            <td><span class="price">₹<span id="grandtotal">{{ grandtotal| floatformat:2 }}</span></td>
+                        </tr>
+                    </table>
+                    <input type="hidden" id="txttotal" value="{{ grandtotal }}"/>
+                    
+                
+                    <a href = "checkout" class="button btn-primary medium checkout-button" >PROCEED TO CHECKOUT</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

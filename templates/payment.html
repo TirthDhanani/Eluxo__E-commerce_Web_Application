@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Razorpay Payment</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <input type="hidden" id="orderid" value="{{order_id}}"/>
+    <input type="hidden" id="state" value="{{state}}"/>
+    <input type="hidden" id="city" value="{{city}}"/>
+    <input type="hidden" id="addressline1" value="{{addressline1}}"/>
+    <input type="hidden" id="addressline2" value="{{addressline2}}"/>
+    <input type="hidden" id="pincode" value="{{pincode}}"/>
+    <input type="hidden" id="phone" value="{{phone}}"/>
+    
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
+    <script>
+        var options = {
+            "key": "{{ key_id }}", // Enter the Key ID generated from the Dashboard
+            "amount": "{{ amount }}", // Amount is in currency subunits. Default currency is INR.
+            "currency": "INR",
+            "name": "My Store",
+            "description": "Test Transaction",
+            "order_id": "{{ order_id }}", // Pass the order ID returned by Razorpay
+            "handler": function (response){
+                
+
+                 // Send details to backend for verification
+                fetch("/success/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: JSON.stringify({
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature,
+                        state:$("#state").val(),
+                        city:$("#city").val(),
+                        addressline1:$("#addressline1").val(),
+                        addressline2:$("#addressline2").val(),
+                        pincode:$("#pincode").val(),
+                        phone:$("#phone").val(),  
+                    })
+                }).then(res => res.json())
+                .then(data => {
+                    if (data.status === "Payment Verified") {
+                        // Redirect to thank-you page
+                        window.location.href = "/thank-you/";
+                    } else {
+                        alert("Payment verification failed.");
+                    }
+                });
+
+
+
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+
+        var rzp1 = new Razorpay(options);
+         window.onload = function() {
+            rzp1.open();
+        };
+    </script>
+</body>
+</html>

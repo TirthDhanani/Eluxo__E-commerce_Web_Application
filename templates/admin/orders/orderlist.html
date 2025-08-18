@@ -1,0 +1,128 @@
+{% extends 'admin/master.html' %}
+{% load static %}
+{% load tz %}
+
+{% block 'title' %}
+Products
+{% endblock %}
+{% block 'css' %}
+ <link rel="stylesheet" type="text/css"
+        href="{% static 'assets/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css' %}">
+    <link rel="stylesheet" type="text/css"
+        href="{% static 'assets/node_modules/datatables.net-bs4/css/responsive.dataTables.min.css' %}">
+{% endblock %}
+{% block 'js' %}
+   <!-- Chart JS -->
+    <script src="{% static 'dist/js/dashboard4.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".clickable-row").forEach(function(row) {
+                row.addEventListener("click", function() {
+                    window.location = this.dataset.href;
+                });
+            });
+        });
+    </script>
+{% endblock %}
+{% block 'main' %}
+     <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-5 align-self-center">
+                        <h4 class="text-themecolor">Manage Orders</h4>
+                    </div>
+                    <!-- <div class="col-md-7 align-self-center text-end">
+                        <div class="d-flex justify-content-end align-items-center">
+                            <ol class="breadcrumb justify-content-end">
+                                <li class="breadcrumb-item">
+                                    <a href="/custom/dashboard">Dashboard</a>
+                                </li>
+                                <li class="breadcrumb-item active">Products</li>
+                            </ol>
+                            <a href="/custom/products/add" class="btn btn-info d-none d-lg-block m-l-15 text-white">
+                                <i class="fa fa-plus-circle"></i> Add Product</a>
+                        </div>
+                    </div> -->
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Orders</h4>
+                                <div class="table-responsive m-t-40">
+                                     {% if messages %}
+                                        {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <table id="example23"
+                                        class="display nowrap table table-hover table-striped border"
+                                        cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <!-- <th>Id</th> -->
+                                                <th>Order ID</th>
+                                                <th>User ID</th>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                                <th>Total Payment</th>
+                                                <th>Discount</th>
+                                                <th>State</th>
+                                                <th>City</th>
+                                                <th>Address line 1</th>
+                                                <th>Address line 2</th>
+                                                <th>Pincode</th>
+                                                <th>Status</th>
+                                                <th>Order Placed</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                       
+                                        <tbody>
+                                            {% for row in orderdata %}
+                                            <tr class="clickable-row" data-href="/custom/orders/{{row.order_id}}" style="cursor: pointer;">
+                                                <td>{{ row.order_id }}</td>
+                                                <td>{{row.user_id}}</td>
+                                                <td>{{row.first_name}}</td>
+                                                <td>{{row.last_name}}</td>
+                                                <td>{{row.total_payment}}</td>
+                                                <td>{{row.discount}}</td>
+                                                <td>{{row.state}}</td>
+                                                <td>{{row.city}}</td>
+                                                <td>{{row.addressline1}}</td>
+                                                <td>{{row.addressline2}}</td>
+                                                <td>{{row.pincode}}</td>
+                                                <td>{{row.status}}</td>
+                                                <td>{{ row.orderdatetime|localtime }}</td>
+                                                <td>{{row.contactnumber}}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+                
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+        </div>   
+       
+{% endblock %}

@@ -1,0 +1,206 @@
+{% extends 'admin/master.html' %}
+{% load static %}
+{% block 'title' %}
+Edit Products
+{% endblock %}
+{% block 'css' %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropify/0.2.2/css/dropify.min.css" />
+
+<link rel="stylesheet" href="{% static '/assets/node_modules/dropify/dist/css/dropify.min.css' %}">
+{% endblock %}
+{% block 'js' %}
+<script src="{% static '/assets/node_modules/dropify/dist/js/dropify.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropify/0.2.2/js/dropify.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('.dropify').dropify();
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
+<script>
+    tinymce.init({
+        selector: '#description, #specifications',
+        plugins: 'advlist autolink lists link image charmap print preview anchor ' +
+                'searchreplace visualblocks code fullscreen insertdatetime media table paste ' +
+                'code help wordcount',
+        toolbar: 'undo redo | formatselect | ' +
+                'bold italic backcolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'removeformat | help',
+        height: 250,
+        
+        // ✅ Prevent <p> tags inside <li>
+        forced_root_block: false,
+        forced_p_newlines: false,
+        valid_elements: '*[*]', // allow all elements/attributes (optional, for flexibility)
+        valid_children: '+body[style],+li[span|strong|b|i|a]' // allow inline inside <li>
+});
+</script>
+
+{% endblock %}
+{% block 'main' %}
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row page-titles">
+            <div class="col-md-5 align-self-center">
+                <h4 class="text-themecolor">Manage Products</h4>
+            </div>
+            <div class="col-md-7 align-self-center text-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <ol class="breadcrumb justify-content-end">
+                        <li class="breadcrumb-item">
+                            <a href="/custom/dashboard">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="/custom/products/view">View Products</a></li>
+                        <li class="breadcrumb-item active">Edit Products</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="m-b-0 "> Edit Products </h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" class="form-horizontal form-bordered">
+                        {% csrf_token %}
+                        <div class="form-body">
+                            <!-- Product Name -->
+                            <div class="form-group row">
+                                <label class="control-label text-end col-md-3" for="product_name">Product name</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="product_name" id="product_name" value="{{ productdata.product_name }}" placeholder="Enter product name" class="form-control" required>
+                                    <small class="form-control-feedback"> This is inline help </small>
+                                </div>
+                            </div>
+                            <!-- Description -->
+                            <div class="form-group row">
+                                <label class="control-label text-end col-md-3" for="description">Description</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="description" id="description" value="{{ productdata.product_description }}" placeholder="Enter description" class="form-control" required>
+                                    <small class="form-control-feedback"> This is inline help </small>
+                                </div>
+                            </div>
+                            <!-- Specifications -->
+                            <div class="form-group row">
+                                <label class="control-label text-end col-md-3" for="specifications">Specifications</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="specifications" id="specifications" value="{{ productdata.product_specification }}" placeholder="Enter specifications" class="form-control">
+                                    <small class="form-control-feedback"> This is inline help </small>
+                                </div>
+                            </div>
+                            <!-- Retail Price -->
+                            <div class="form-group row">
+                                <label class="control-label text-end col-md-3" for="retail_price">Retail Price</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="retail_price" id="retail_price" value="{{ productdata.retail_price }}" placeholder="Enter retail price" class="form-control">
+                                    <small class="form-control-feedback"> This is inline help </small>
+                                </div>
+                            </div>
+                            <!-- Sell Price -->
+                            <div class="form-group row">
+                                <label class="control-label text-end col-md-3" for="sell_price">Sell Price</label>
+                                <div class="col-md-9">
+                                    <input type="text" name="sell_price" id="sell_price" value="{{ productdata.sell_price }}" placeholder="Enter sell price" class="form-control">
+                                </div>
+                            </div>
+                            <!-- Subcategory -->
+                            <div class="form-group row">
+                                <label class="control-label text-end col-md-3" for="subcategory">Subcategory</label>
+                                <div class="col-md-9">
+                                    <select name="subcat_id" id="subcategory" class="form-control form-select">
+                                        <option value="">Select Subcategory</option>
+                                        {% for row in subcat %}
+                                            <option value="{{ row.subcat_id }}" {% if row.subcat_id == productdata.subcat_id.subcat_id %} selected {% endif %}>{{ row.subcat_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Thumbnail Image -->
+                            <div class="form-group row">
+                                <label class="control-label text-end col-md-3" for="thumbnail_image">Thumbnail Image</label>
+                                <div class="col-lg-6 col-md-6">
+                                    <input type="file" name="thumbnail_image" id="thumbnail_image" class="dropify" />
+                                    <img src="{{productdata.thumbnail_image}}" width="100" height="60"/>
+                                </div>
+                                
+                            </div>
+                            <!-- Image 1 -->
+                            <div class="form-group row">
+                                <label class="control-label text-end col-md-3" for="image_1">Image 1</label>
+                                <div class="col-lg-6 col-md-6">
+                                    <input type="file" name="image_1" id="image_1" class="dropify" />
+                                    <img src="{{productdata.image1}}" width="100" height="60"/>
+                                </div>
+                                
+                            </div>
+                            <!-- Image 2 -->
+                            <div class="form-group row">
+                                <label class="control-label text-end col-md-3" for="image_2">Image 2</label>
+                                <div class="col-lg-6 col-md-6">
+                                    <input type="file" name="image_2" id="image_2" class="dropify" />
+                                    <img src="{{productdata.image2}}" width="100" height="60"/>
+                                </div>
+                                
+                            </div>
+                            <!-- Image 3 -->
+                            <div class="form-group row">
+                                <label class="control-label text-end col-md-3" for="image_3">Image 3</label>
+                                <div class="col-lg-6 col-md-6">
+                                    <input type="file" name="image_3" id="image_3" class="dropify" />
+                                    <img src="{{productdata.image3}}" width="100" height="60"/>
+                                </div>
+                                
+                                
+                            </div>
+                            <!-- Video URL -->
+                            <div class="form-group row">
+                                <label class="control-label text-end col-md-3" for="video_url">Video URL</label>
+                                <div class="col-md-9">
+                                    <input type="url" name="video_url" id="video_url" value= "{{productdata.Video_url}}"placeholder="https://..." class="form-control">
+                                </div>
+                            </div>
+                            <!-- Membership Status -->
+                            <div class="form-group row">
+                                <label class="control-label text-end col-md-3">Membership</label>
+                                <div class="col-md-9">
+                                    <div class="radio-list">
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="product_status" value="Active" id="membership_active" class="form-check-input" {% if productdata.is_active == 'Active' %}checked{% endif %}>
+                                            <label class="form-check-label" for="membership_active">Active</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" name="product_status" value="Inactive" id="membership_inactive" class="form-check-input" {% if productdata.is_active == 'Inactive' %}checked{% endif %}>
+                                            <label class="form-check-label" for="membership_inactive">Inactive</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="offset-sm-3 col-md-9">
+                                            <button type="submit" class="btn btn-success text-white"> 
+                                                <i class="fa fa-check"></i> Submit
+                                            </button>
+                                            <button type="button" class="btn btn-inverse">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

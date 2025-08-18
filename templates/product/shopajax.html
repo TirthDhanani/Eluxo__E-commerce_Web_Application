@@ -1,0 +1,162 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block 'title' %}
+Products
+{% endblock %}
+{% block 'css' %}{% endblock %}
+{% block 'js' %}
+
+<script>
+    function filter(catid="All",min=0,max=0,odby="Default")
+    {
+        $.ajax({
+            url:"/load_products",
+            method:"POST",
+            data:{
+                "catid":catid,
+                "minvalue":min,
+                "maxvalue":max,
+            },
+            success:function(json)
+            {
+                var output = "";
+                $.each(json,(key,row)=>{
+                    output += `<li class="product-item style3 col-sm-6 col-md-4">
+						<div class="product-inner">
+							<div class="product-thumb has-back-image">
+								<a href="#"><img src="${row.thumbnail_image}" alt=""></a>
+								<a class="back-image" href="#"><img src="${row.image2}" alt=""></a>
+								<div class="gorup-button">
+									<a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
+									<a href="#" class="compare"><i class="fa fa-exchange"></i></a>
+									<a href="#" class="quick-view"><i class="fa fa-search"></i></a>
+								</div>
+							</div>
+							<div class="product-info">
+								<h3 class="product-name"><a href="/view/${row.product_id}">${row.product_name}</a></h3>
+								<span class="price">
+									<ins>₹ ${row.sell_price}</ins>
+								</span>
+                                <form class="cart" enctype="multipart/form-data" method="post" action="/cart/add/${row.product_id}">
+								    {% csrf_token %}
+                                    <button class="button button-add-cart" data-quantity="1"  type="submit">ADD TO CART</button>
+                                </form>
+							</div>
+						</div>
+					</li>`;
+                })
+                $(".product-list-grid").html(output);
+            },
+            error:function(error)
+            {
+                console.log(error);
+            }
+        });
+    }
+    $(document).ready(function(){
+
+        var cid="All";
+        
+        filter(cid);
+
+
+        $(".catfilter").click(function(){
+            cid = $(this).attr("data-id");
+            filter(cid)
+        });
+        $("#btnprice").click(function(){
+            var min = $("#txtmin").val();
+            var max = $("#txtmax").val();
+            filter(cid,min,max)
+        });
+
+    });
+</script>
+
+
+{% endblock %}
+{% block 'main' %}
+
+<div class="main-container shop-with-banner left-slidebar">
+	<div class="container">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+		<div class="shop-banner">
+			<img src="{% static 'user_assets/images/slides/slider-cat2.jpg' %}" alt="">
+		</div>
+		<div class="breadcrumbs style2">
+            <a href="#">Home</a>
+            <span>All products</span>
+        </div>
+		<div class="row">
+			<div class="main-content col-sm-8 col-md-9">
+				<div class="shop-top">
+                    <div class="shop-top-left">
+                        <span class="woocommerce-result-count">Showing 1-9 of 2268 results</span>
+                    </div>
+                    <div class="shop-top-right">
+                        <div class="orderby-wapper">
+                            <select class="orderby">
+                                <option value="">Short by Newness</option>
+                                <option value="">Short by price</option>
+                            </select>
+                        </div>
+                        <div class="orderby-wapper display-products">
+                            <span class="label-filter">SHOW:</span>
+                            <select class="orderby">
+                                <option value="">9 products</option>
+                                <option value="">12 products</option>
+                            </select>
+                        </div>
+
+                        <div class="show-grid-list">
+                            <span class="label-filter">VIEW:</span>
+                            <a class="show-grid active" href="#"><i class="fa fa-th"></i></a>
+                            <a class="show-list" href="#"><i class="fa fa-list"></i></a>
+                        </div>
+                    </div>
+                </div>
+				<ul class="product-list-grid desktop-columns-3 tablet-columns-2 mobile-columns-1 row flex-flow">
+					
+				</ul>
+				<div class="navigation">
+                    <ul>
+                        <li><a href="#"><i class="fa fa-long-arrow-left"></i></a></li>
+                        <li><a href="#">1</a></li>
+                        <li class="active"><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#"><i class="fa fa-long-arrow-right"></i></a></li>
+                    </ul>
+                </div>
+			</div>
+			<div class="col-sm-4 col-md-3 sidebar"> 
+                <!-- Product category -->
+                <div class="widget widget_product_categories">
+                    <h2 class="widget-title">Categories</h2>
+                    <ul class="product-categories">
+						{% for row in catdata %}
+                        <li><a class="catfilter" data-id="{{row.cat_id}}" href="javascript:void(0);">{{row.cat_name}}</a><span class="count-item">{{row.product_count}}</span></li>
+						{% endfor %}
+                       
+                    </ul>
+                </div>
+                <!-- ./Product category -->
+                 <!-- Filter price -->
+                <div class="widget widget_price_filter">
+                    <h2 class="widget-title">PRICES</h2>
+                    <div class="price_slider_wrapper">
+                        <div class="amount-range-price">Price: ₹10.00 - ₹5000.00</div>
+                        <div data-label-reasult="price:" data-min="10" data-max="5000" data-unit="₹" class="slider-range-price " data-value-min="10" data-value-max="5000"></div>
+                        <input type="hidden" id="txtmin" value="10"/>
+                        <input type="hidden" id="txtmax" value="5000"/>
+                        <button id="btnprice" class="button">Filter NOW</button>
+                    </div>
+                </div>
+        	</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

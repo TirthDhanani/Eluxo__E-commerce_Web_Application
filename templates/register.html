@@ -1,0 +1,55 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block 'main' %}
+<div class="container">
+    <div class="main-content">
+        <div class="page-title">
+            <h3>ACCOUNT</h3>
+        </div>
+           {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-checkout">
+                    <h5 class="form-title">Login</h5>
+                    <form method="POST" action="/checklogin">
+                        {% csrf_token %}
+                        <p><input type="text" name="email" placeholder="Email Address"></p>
+                        <p><input type="text" name="password" placeholder="Password"></p>
+                        <p style="margin-bottom: 15px;">
+                            <a href="/forgotpassword">Forgot Password?</a>
+                        </p>
+                        <button class="button btn-primary medium">LOGIN</button>
+                    </form>
+                </div>
+              
+            </div>
+            <div class="col-sm-6">
+                <div class="form-checkout">
+                    <h5 class="form-title">Register</h5>
+                  
+                    <form method="POST">
+                         {% csrf_token %}
+                         <div class="row">
+                        <div class="col-sm-6">
+                            <p><input type="text" name="firstname" placeholder="First Name"></p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p><input type="text" name="lastname" placeholder="Last Name"></p>
+                        </div>
+                    </div>
+                    <p><input type="text" name="email" placeholder="Email Address"></p>
+                    <p><input type="text" name="password" placeholder="Password"></p>
+                    <button type="submit">Register</button>
+                    </form>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
