@@ -98,6 +98,14 @@ DATABASES = {
         'HOST':'localhost',
         'PORT':'3306',
     }
+    #  'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'tirthdhanani$default',
+    #     'USER': 'tirthdhanani',
+    #     'PASSWORD': 'Tirth7588',
+    #     'HOST':'tirthdhanani.mysql.pythonanywhere-services.com',
+    #     'PORT':'3306',
+    # }
 }
 
 
@@ -159,3 +167,8 @@ EMAIL_HOST_PASSWORD = "ukvvhccqchgjilqz"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MYURL=""
+# ...existing code...
+
+STRIPE_KEY_ID = "your_stripe_key_id_here"
+
+# ...existing code...

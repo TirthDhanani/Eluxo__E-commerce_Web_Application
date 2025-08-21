@@ -16,7 +16,7 @@ def initiate_payment(request):
     amount = float(request.POST.get("totalpayment"))
     # Amount in paisa: 500 Rs = 50000 paisa
     payment = client.order.create({
-        'amount': amount * 100,
+        'amount': int(amount * 100),
         'currency': 'INR',
         'payment_capture': '1'
     })
@@ -33,7 +33,7 @@ def initiate_payment(request):
     context = {
         'key_id': settings.RAZORPAY_KEY_ID,
         'order_id': payment['id'],
-        'amount': amount * 100,
+        'amount': int(amount * 100),
         'state':state,
         'city':city,
         'addressline1':addressline1,

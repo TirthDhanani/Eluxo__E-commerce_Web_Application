@@ -7,4 +7,5 @@ urlpatterns = [
     path('shopajax', views.load_ajax_product),
     path('load_products', views.load_products),
     path('shop/<int:cid>', views.load_menuproduct),
+    path('product/shop/review', views.add_review),
 ]

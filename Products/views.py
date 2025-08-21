@@ -1,15 +1,21 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from AdminProducts.models import ProductModel
 from AdminCategories.models import CategoryModel
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.csrf import csrf_protect
+from Products.models import ReviewModel
+from django.contrib import messages
+
 # Create your views here.
 def load_viewproduct(request,pid):
     productdata = ProductModel.objects.get(product_id = pid)
+    similarproducts = ProductModel.objects.filter(subcat_id__cat_id=productdata.subcat_id.cat_id).exclude(product_id=pid)
+    # reviewdata=ReviewModel.objects.get(product_id=pid)
     context = {
-        'productdata' : productdata
+        # 'reviewdata' : reviewdata,
+        'productdata' : productdata,
+        'similarproducts' : similarproducts,
     }    
     return render(request,'product/singleproduct.html',context)
 
@@ -56,41 +62,26 @@ def load_products(request):
         data = data.filter(sell_price__lte=maxvalue)
 
     data = list(data.values())
-    # # Pagination
-    # paginator = Paginator(data, per_page)
-    # page_obj = paginator.get_page(data)
 
-    # # Build JSON rows (avoid serializing model instances)
-    # items = []
-    # for p in page_obj.object_list:
-    #     # If these are FileFields/ImageFields, .url gives a usable src
-    #     thumb_url = getattr(p.thumbnail_image, 'url', '') if hasattr(p, 'thumbnail_image') else ''
-    #     image2_url = getattr(p.image2, 'url', '') if hasattr(p, 'image2') else thumb_url
-    #     items.append({
-    #         "product_id": p.pk,
-    #         "product_name": getattr(p, "product_name", str(p)),
-    #         "sell_price": str(getattr(p, "sell_price", "0")),  # keep as string for JSON safety
-    #         "thumbnail_image": thumb_url,
-    #         "image2": image2_url,
-    #     })
-
-    # # Compact page range with ellipsis
-    # elided = page_obj.paginator.get_elided_page_range(
-    #     number=page_obj.number, on_each_side=1, on_ends=1
-    # )
-    # pages = [n if isinstance(n, int) else "…" for n in elided]
-
-    # return JsonResponse({
-    #     "items": items,
-    #     "pagination": {
-    #         "page": page_obj.number,
-    #         "num_pages": paginator.num_pages,
-    #         "has_next": page_obj.has_next(),
-    #         "has_previous": page_obj.has_previous(),
-    #         "next_page": page_obj.next_page_number() if page_obj.has_next() else None,
-    #         "prev_page": page_obj.previous_page_number() if page_obj.has_previous() else None,
-    #         "pages": pages,
-    #         "total": paginator.count,
-    #     }
-    # })
     return JsonResponse(data,safe=False)
+def add_review(request):
+    try:
+        if request.method == "POST":
+            product_id = request.POST.get("product_id")
+            user_name = request.POST.get("name")
+            user_email = request.POST.get("email")
+            review_text = request.POST.get("comment")
+            rating = request.POST.get("rating")
+            # Create a new review instance
+            review = ReviewModel(
+                product_id=ProductModel.objects.get(product_id=product_id),
+                user_name=user_name,
+                user_email=user_email,
+                review_text=review_text,
+                rating=rating
+            )
+            review.save()
+            messages.success(request, "Subcategory updated!")
+    except Exception as e:
+            messages.error(request, e)
+    return redirect('/view/' + str(product_id))

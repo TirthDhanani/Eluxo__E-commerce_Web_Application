@@ -3,7 +3,27 @@
 {% block 'title' %}
 Products
 {% endblock %}
-{% block 'css' %}{% endblock %}
+{% block 'css' %}
+<style>
+    /* Mysql Password : Tirth7588 */
+/* star rating (pure CSS, no plugin) */
+.rating {
+  direction: rtl;            /* right-to-left so hover fills leftwards */
+  unicode-bidi: bidi-override;
+  display: inline-flex;
+}
+.rating > input { display: none; } /* hide radios */
+.rating > label {
+  font-size: 24px;
+  color: #ccc;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.rating > label:hover,
+.rating > label:hover ~ label { color: #f5b301; }       /* hover preview */
+.rating > input:checked ~ label { color: #f5b301; }     /* selected */
+</style>
+{% endblock %}
 {% block 'js' %}{% endblock %}
 {% block 'main' %}
 <div class="product-details-full">                            
@@ -79,14 +99,15 @@ Products
             </div>     
         </div>  
     </div> 
-
+    {% if similarproducts %}
     <div class="upsell-products">
         <div class="section-title text-center"><h3>Similar Products</h3> </div>
          <ul class="owl-carousel" data-responsive='{"0":{"items":1},"600":{"items":3},"1000":{"items":4}}' data-autoplay="true" data-loop="true" data-items="4" data-dots="false" data-nav="false" data-margin="30">
+            {% for row in similarproducts %}
             <li class="product-item">
                 <div class="product-inner">
                     <div class="product-thumb">
-                        <a href="#"><img src="{% static 'user_assets/images/products/5.jpg' %}" alt=""></a>
+                        <a href="#"><img src="{{row.thumbnail_image}}" alt=""></a>
                         <div class="gorup-button">
                           <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
                           <a href="#" class="compare"><i class="fa fa-exchange"></i></a>
@@ -94,77 +115,19 @@ Products
                         </div>
                     </div>
                     <div class="product-info">
-                        <h3 class="product-name"><a href="#">London Star Sweatshirt</a></h3>
+                        <h3 class="product-name"><a href="#">{{row.product_name}}</a></h3>
                         <span class="price">
-                            <ins>£85.00</ins>
-                            <del>£95.00</del>
+                            <ins>₹ {{row.sell_price}}</ins>
+                            <del>₹ {{row.retail_price}}</del>
                         </span>
                         <a href="#" class="button">ADD TO CART</a>
                     </div>
                 </div>
             </li>
-            <li class="product-item">
-                <div class="product-inner">
-                    <div class="product-thumb">
-                        <a href="#"><img src="{% static 'user_assets/images/products/6.jpg' %}" alt=""></a>
-                        <div class="gorup-button">
-                          <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                          <a href="#" class="compare"><i class="fa fa-exchange"></i></a>
-                          <a href="#" class="quick-view"><i class="fa fa-search"></i></a>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name"><a href="#">London Star Sweatshirt</a></h3>
-                        <span class="price">
-                            <ins>£85.00</ins>
-                            <del>£95.00</del>
-                        </span>
-                        <a href="#" class="button">ADD TO CART</a>
-                    </div>
-                </div>
-            </li>
-            <li class="product-item">
-                <div class="product-inner">
-                    <div class="product-thumb">
-                        <a href="#"><img src="{% static 'user_assets/images/products/7.jpg' %}" alt=""></a>
-                        <div class="gorup-button">
-                          <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                          <a href="#" class="compare"><i class="fa fa-exchange"></i></a>
-                          <a href="#" class="quick-view"><i class="fa fa-search"></i></a>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name"><a href="#">London Star Sweatshirt</a></h3>
-                        <span class="price">
-                            <ins>£85.00</ins>
-                            <del>£95.00</del>
-                        </span>
-                        <a href="#" class="button">ADD TO CART</a>
-                    </div>
-                </div>
-            </li>
-            <li class="product-item">
-                <div class="product-inner">
-                    <div class="product-thumb">
-                        <a href="#"><img src="{% static 'user_assets/images/products/8.jpg' %}" alt=""></a>
-                        <div class="gorup-button">
-                          <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
-                          <a href="#" class="compare"><i class="fa fa-exchange"></i></a>
-                          <a href="#" class="quick-view"><i class="fa fa-search"></i></a>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name"><a href="#">London Star Sweatshirt</a></h3>
-                        <span class="price">
-                            <ins>£85.00</ins>
-                            <del>£95.00</del>
-                        </span>
-                        <a href="#" class="button">ADD TO CART</a>
-                    </div>
-                </div>
-            </li>
+            {% endfor %}
         </ul>   
     </div> 
+    {% endif %}
 </div> <!--END CONTAINER-->                                             
 
 <div class="box-list-reviews">
@@ -178,11 +141,11 @@ Products
                   <div class="comment_container">
                       <div class="comment-info">
                           <div class="rating">
-                              <i class="fa fa-star"></i>
-                              <i class="fa fa-star"></i>
-                              <i class="fa fa-star"></i>
-                              <i class="fa fa-star"></i>
-                              <i class="fa fa-star"></i>                                                
+                                  <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>                                                
                           </div>
                           <div class="meta">
                             <span class="author">James Koster</span>
@@ -226,26 +189,27 @@ Products
       <div class="col-md-6 col-lg-6 col-sm-12">
         <div class="box-review form-review">
             <h4 class="title-border"><span class="text">ADD A REVIEW</span></h4>
-            <form class="reviews">
-                <p>
-                  <input type="text" name="name" placeholder="Your name" />
-                </p>
-                <p>
-                  <input type="email" name="email" placeholder="Your email" />
-                </p>
-                <p>
-                  <textarea cols="40" placeholder="Your review"></textarea>
-                </p>
-                <div class="rating">
-                    <label>Your rating</label>
-                    <a href="#"><i class="fa fa-star"></i></a>  
-                    <a href="#"><i class="fa fa-star"></i></a>  
-                    <a href="#"><i class="fa fa-star"></i></a>  
-                    <a href="#"><i class="fa fa-star"></i></a>  
-                    <a href="#"><i class="fa fa-star"></i></a>                                                 
-                </div>
-                <input type="submit" class="button submit" name="email" value="ADD A REVIEW" />
+            {% if request.user.is_authenticated %}  
+            
+            <form method="post" action="/product/shop/review">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ productdata.product_id }}" />
+            <input type="text" name="name" placeholder="Your name" value="{{ request.user.get_full_name }}" />
+            <input type="email" name="email" placeholder="Your email" value="{{ request.user.email }}" />
+            <textarea name="comment" placeholder="Write your review..."></textarea>
+
+            <div class="rating">
+                <!-- radios are reversed so hover fills to the left -->
+                <input type="radio" id="star5" name="rating" value="5"><label for="star5" title="5 stars">★</label>
+                <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="4 stars">★</label>
+                <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="3 stars">★</label>
+                <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="2 stars">★</label>
+                <input type="radio" id="star1" name="rating" value="1" required><label for="star1" title="1 star">★</label>
+            </div>
+
+            <button class="button" type="submit">Add a Review</button>
             </form>
+            {% endif %}
         </div>
       </div>
     </div>
