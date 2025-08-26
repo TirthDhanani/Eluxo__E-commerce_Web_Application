@@ -42,6 +42,6 @@ Payments: Razorpay
 
 Email (OTP): Django email backend (SMTP or console for dev)
 
-DB: SQLite (dev) or PostgreSQL/MySQL (prod)
+DB: MySQL (prod)
 
 Deploy: PythonAnywhere (demo)
